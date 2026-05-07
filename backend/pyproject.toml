@@ -18,6 +18,7 @@ build-backend = "poetry.core.masonry.api"
 
 [project.urls]
 Repository = "https://github.com/gabrielsrs/IOPresence"
+
 [dependency-groups]
 dev = [
     "pytest (>=9.0.3,<10.0.0)",
@@ -25,3 +26,26 @@ dev = [
     "taskipy (>=1.14.1,<2.0.0)",
     "ruff (>=0.15.12,<0.16.0)"
 ]
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT', 'FAST', 'TC', 'C4']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+
+[tool.pytest.init_options]
+pythonpath = '.'
+asyncio_default_fixture_loop_scope = 'function'
+
+[tool.taskipy.tasks]
+lint = 'ruff check'
+pre_format = 'ruff check --fix'
+format = 'ruff format'
+pre_test = 'task lint'
+test = 'pytest -s -x --cov=app -vv'
+post_test = 'coverage html'
